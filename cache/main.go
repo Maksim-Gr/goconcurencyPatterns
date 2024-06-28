@@ -36,5 +36,17 @@ func (c *Cache) Get(ID string) (Data, bool) {
 		return *data, true
 	}
 
-	data, loaded = retrieveData(ID)
+	data, loaded := retrieveData(ID)
+	c.mu.Lock()
+	defer c.mu.Unlock()
+	d, exists := c.m[data.ID]
+	if exists {
+		return *d, true
+	}
+	if !loaded {
+		c.m[ID] = nil
+		return Data{}, false
+	}
+	c.m[data.ID] = data
+	return *data, true
 }
