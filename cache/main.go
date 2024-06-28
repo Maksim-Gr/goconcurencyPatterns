@@ -1,6 +1,10 @@
 package main
 
-import "sync"
+import (
+	"fmt"
+	"math/rand"
+	"sync"
+)
 
 type Data struct {
 	ID      string
@@ -49,4 +53,25 @@ func (c *Cache) Get(ID string) (Data, bool) {
 	}
 	c.m[data.ID] = data
 	return *data, true
+}
+
+func main() {
+	cache := Cache{
+		m: make(map[string]*Data),
+	}
+	ids := []string{"a", "b", "c", "d", "e", "f", "g", "h", "i", "j"}
+
+	wg := sync.WaitGroup{}
+	for i := 0; i < 100; i++ {
+		wg.Add(1)
+		go func() {
+			defer wg.Done()
+			for i := 0; i < 1000; i++ {
+				id := ids[rand.Intn(len(ids))]
+				cache.Get(id)
+			}
+		}()
+	}
+	wg.Wait()
+	fmt.Printf("Number of misses cache : %d\n", numCalls)
 }
