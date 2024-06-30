@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gorilla/mux"
+	"io"
 	"log"
 	"net/http"
 )
@@ -19,4 +20,12 @@ func main() {
 
 	http.HandleFunc("/", helloSimpleHandler)
 	log.Fatal(http.ListenAndServe(":8080", r))
+}
+
+func keyValueHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	key := vars["key"]
+
+	value, err := io.ReadAll(r.Body)
+	defer r.Body.Close()
 }
