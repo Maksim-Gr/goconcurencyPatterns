@@ -26,5 +26,5 @@ func main() {
 	}
 	wg.Wait()
 	after := memConsumed()
-	fmt.Printf("%.3fkb", float64(after-before))
+	fmt.Printf("%.3fkb", float64(after-before)/numGoroutines/1000)
 }
