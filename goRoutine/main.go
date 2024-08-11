@@ -6,8 +6,12 @@ import (
 	"sync"
 )
 
-// showing the actual size for goroutine
 func main() {
+	measureOneGoRoutine()
+}
+
+// showing the actual size for goroutine
+func measureOneGoRoutine() {
 	memConsumed := func() uint64 {
 		runtime.GC()
 		var s runtime.MemStats
